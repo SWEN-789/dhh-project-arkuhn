@@ -13,7 +13,6 @@ document.querySelector('#clear').addEventListener('click', () => {
 recognition.addEventListener('result', (e) => {
     let last = e.results.length - 1;
     let text = e.results[last][0].transcript;
-
     console.log('Confidence: ' + e.results[0][0].confidence);
     console.log(text)
     text.split(' ').forEach((word,index) => {
@@ -21,7 +20,8 @@ recognition.addEventListener('result', (e) => {
         */
        var newDiv = document.createElement("div"); 
        newDiv.id = word + index.toString()
-       var newContent = document.createTextNode(word)
+       newDiv.appendChild(document.createElement("br"))
+       newDiv.appendChild(document.createTextNode(word + ':   '))
        document.body.appendChild(newDiv)
        ; 
         /* Get video URL from server
@@ -32,14 +32,14 @@ recognition.addEventListener('result', (e) => {
         http.open('GET', requrl)
         http.send();
         http.onreadystatechange=(e)=> {
-            console.log(e)
             if (http.responseText && http.readyState === 4 && http.status === 200) {
                 var video = document.createElement('video');
-                console.log(http)
                 video.src=http.responseText
                 video.autoplay = true;
                 video.controls = true;
-                document.getElementById(word + index.toString()).appendChild(video)
+                let div = document.getElementById(word + index.toString())
+                div.appendChild(video)
+                div.appendChild(document.createElement("br"))
             }
             console.log(http.responseText)
         }
